@@ -9,9 +9,9 @@ use std::{
 };
 
 fn main() {
-    let mut handles = Vec::new();
+    let mut handles: Vec<thread::JoinHandle<u128>> = Vec::new();
     for i in 0..10 {
-        let handle = thread::spawn(move || {
+        let handle: thread::JoinHandle<u128> = thread::spawn(move || {
             let start = Instant::now();
             thread::sleep(Duration::from_millis(250));
             println!("Thread {i} done");
@@ -20,10 +20,11 @@ fn main() {
         handles.push(handle);
     }
 
-    let mut results = Vec::new();
+    let mut results: Vec<u128> = Vec::new();
     for handle in handles {
         // TODO: Collect the results of all threads into the `results` vector.
         // Use the `JoinHandle` struct which is returned by `thread::spawn`.
+        results.push(handle.join().unwrap())
     }
 
     if results.len() != 10 {
